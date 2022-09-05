@@ -28,11 +28,12 @@ router.put("/:id", verifyUser, updateUser);
 //DELETE USER
 router.delete("/:id", verifyUser, deleteUser);
 
+ //GET ALL USERS
+router.get("/", verifyAdmin, getUsers);
+
 //GET USER
 router.get("/:id", verifyUser, getUser);
 
-//GET ALL USERS
-router.get("/", verifyAdmin, getUsers);
 
 // GET GENDERED USERS
 router.get('/gendered-users', verifyUser, getGenderedUsers)

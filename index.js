@@ -6,7 +6,6 @@ import usersRoute from "./routes/user.js";
 import messageRoute from "./routes/message.js";
 import hashtagRoute from "./routes/hashtag.js";
 import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
 import cors from "cors";
 
 const app = express();
@@ -14,7 +13,10 @@ dotenv.config();
 
 const connect = async () => {
   try {
-    await mongoose.connect(process.env.MONGO);
+    mongoose.connect(process.env.MONGO, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
     console.log("Connected to mongoDB.");
   } catch (error) {
     throw error;
@@ -29,8 +31,7 @@ mongoose.connection.on("disconnected", () => {
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
-app.use(express.json());
-
+app.use(express.json()); 
 app.use("/api/auth", authRoute);
 app.use("/api/user", usersRoute);
 app.use("/api/chat", messageRoute);
@@ -48,7 +49,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8800, () => {
-  connect();
-  console.log("Connected to backend.");
-});
+const start = async () => {
+  try { 
+    await connect()
+    app.listen(8800, () => {
+      console.log("Server started on port 8800.");
+    });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+start();
