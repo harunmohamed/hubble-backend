@@ -4,6 +4,7 @@ import {
   deleteUser,
   getUser,
   getUsers,
+  getGenderedUsers
 } from "../controllers/user.js";
 import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 
@@ -21,16 +22,19 @@ const router = express.Router();
 //   res.send("hello admin, you are logged in and you can delete all accounts")
 // })
 
-//UPDATE
+//UPDATE USER
 router.put("/:id", verifyUser, updateUser);
 
-//DELETE
+//DELETE USER
 router.delete("/:id", verifyUser, deleteUser);
 
-//GET
+//GET USER
 router.get("/:id", verifyUser, getUser);
 
-//GET ALL
+//GET ALL USERS
 router.get("/", verifyAdmin, getUsers);
+
+// GET GENDERED USERS
+router.get('/gendered-users', verifyUser, getGenderedUsers)
 
 export default router;

@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 
+// update user - CAN USE THIS TO ADD HASHTAGS AND MATHCES TOO
 export const updateUser = async (req,res,next)=>{
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -12,6 +13,8 @@ export const updateUser = async (req,res,next)=>{
     next(err);
   }
 }
+
+// delete user 
 export const deleteUser = async (req,res,next)=>{
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -20,6 +23,8 @@ export const deleteUser = async (req,res,next)=>{
     next(err);
   }
 }
+
+// get single user
 export const getUser = async (req,res,next)=>{
   try {
     const user = await User.findById(req.params.id);
@@ -28,10 +33,24 @@ export const getUser = async (req,res,next)=>{
     next(err);
   }
 }
+
+
+// get all users
 export const getUsers = async (req,res,next)=>{
   try {
     const users = await User.find();
     res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+// get gendered users 
+export const getGenderedUsers = async (req,res,next)=>{
+  try {
+    const foundUsers = await User.findAll({gender: req.body.gender});
+    res.status(200).json(foundUsers);
   } catch (err) {
     next(err);
   }

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const HashtagSchema = new mongoose.Schema (
     {
-        author: {
+        owner: {
             type: String
         },
         img_url: {
@@ -11,10 +11,10 @@ const HashtagSchema = new mongoose.Schema (
             type: String
         },
         members: {
-            type: [String]
+            type: [{String}]
         },
     },
-    { timestamps: true }
+    { timestamps: true, collection: 'hashtags' }
 )
 
 export default mongoose.model("Hashtag", HashtagSchema)
