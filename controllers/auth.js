@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
+// in login && register you should return only token.
+
 export const register = async (req, res, next) => {
   try {
     console.log(req.body)
@@ -15,7 +17,12 @@ export const register = async (req, res, next) => {
     });
 
     await newUser.save();
-    res.status(200).send("User has been created.");
+    const token = jwt.sign(
+      { id: newUser._id, isAdmin: newUser.isAdmin },
+      process.env.JWT
+    );
+
+    res.status(200).send( {message:"User has been created.", token: token });
   } catch (err) {
     next(err);
   }
@@ -37,13 +44,7 @@ export const login = async (req, res, next) => {
       process.env.JWT
     );
 
-    const { password, isAdmin, ...otherDetails } = user._doc;
-    res
-      .cookie("access_token", token, {
-        httpOnly: true,
-      })
-      .status(200)
-      .json({ details: { ...otherDetails }, isAdmin });
+    res.status(200).send( {message:"User has been logged in.", token: token });
   } catch (err) {
     next(err);
   }

@@ -14,7 +14,7 @@ const HashtagSchema = new mongoose.Schema (
             type: String
         },
         members: {
-            type: [{String}]
+            type: [String]
         },
     },
     { timestamps: true, collection: 'hashtags' }

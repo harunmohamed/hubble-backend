@@ -7,20 +7,12 @@ import messageRoute from "./routes/message.js";
 import hashtagRoute from "./routes/hashtag.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import connect from "./utils/mongoConnect.js";
 
 const app = express();
 dotenv.config();
 
-const connect = async () => {
-  try {
-    mongoose.connect(process.env.MONGO, (err) => {
-      if(err) console.log(err) 
-      else console.log("mongdb is connected");
-     });
-  } catch (error) {
-    throw error;
-  }
-}; 
+
 
 mongoose.connection.on("disconnected", () => {
   console.log("mongoDB disconnected!");
@@ -31,6 +23,8 @@ app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.json()); 
+app.set("trust proxy", true);
+
 app.use("/api/auth", authRoute);
 app.use("/api/user", usersRoute);
 app.use("/api/chat", messageRoute);
