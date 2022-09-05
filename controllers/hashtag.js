@@ -1,5 +1,15 @@
 import Hashtag from "../models/Hashtag.js";
 
+// create hashtag 
+export const createHashtag = async( req, res, next) => {
+    try {
+        const newHashtag = await Hashtag.create(req.body)
+        res.status(201).json(newHashtag)
+    } catch (err) {
+        next(err);
+    }
+}
+
 // update hashtag with new members when user follows a hashtag
 export const updateHashtag = async (req, res, next) => {
     try {
@@ -8,7 +18,7 @@ export const updateHashtag = async (req, res, next) => {
             { $set: req.body },
             {new : true}
         );
-        res.status(200).json(updatedHashtag);
+        res.status(200).json( {data: updatedHashtag });
     } catch (err) {
         next(err);
     }
@@ -26,10 +36,10 @@ export const deleteHashtag = async (req, res, next) => {
 
 
 // get single hashtag
-export const getHashtag = async (req, res, body) => {
+export const getHashtag = async (req, res, next) => {
     try {
-        const hashtag = await Hashtag.findById(req.params.id);
-        res.status(200).json(hashtag); 
+        const hashtag = await Hashtag.findOne({name:  new RegExp('^'+req.params.name+'$', "i")});
+        res.status(200).json( { data:hashtag }); 
     } catch (err) {
         next(err)
     }
@@ -39,8 +49,8 @@ export const getHashtag = async (req, res, body) => {
 // get all hashtags
 export const getHashtags = async (req, res, next) => {
     try {
-        const hashtags = Hashtag.find();
-        res.status(200).json(hashtags);
+        const hashtags = await Hashtag.find();
+        res.status(200).json( { data:hashtags });
     } catch (err) {
         next(err);
     }
