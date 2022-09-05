@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema(
     about: {
       type: String,
     },
-    dob_day: {
+    dob_day: { 
       type: Number,
       default: 20,
       required: true,

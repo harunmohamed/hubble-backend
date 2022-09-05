@@ -7,6 +7,9 @@ const MessageSchema = new mongoose.Schema (
         to: {
             type: String
         },
+        message: {
+            type: String
+        }
     },
     { timestamps: true, collection: 'messages' }
 )

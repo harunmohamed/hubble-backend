@@ -1,4 +1,4 @@
-import Hashtag from "../models/Hashtag";
+import Hashtag from "../models/Hashtag.js";
 
 // update hashtag with new members when user follows a hashtag
 export const updateHashtag = async (req, res, next) => {
