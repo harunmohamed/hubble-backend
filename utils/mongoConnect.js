@@ -4,7 +4,7 @@ dotenv.config();
 
 const connect = async () => {
     try {
-      mongoose.connect(process.env.MONGO, (err) => {
+      mongoose.connect(process.env.LOCAL_MONGO, (err) => {
         if(err) console.log(err) 
         else console.log("mongdb is connected");
        });

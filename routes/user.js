@@ -4,7 +4,7 @@ import {
   deleteUser,
   getUser,
   getUsers,
-  getGenderedUsers
+  gender
 } from "../controllers/user.js";
 import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 
@@ -23,7 +23,7 @@ const router = express.Router();
 // })
 
 //UPDATE USER
-router.put("/:id", verifyUser, updateUser);
+router.put("/", verifyUser, updateUser);
 
 //DELETE USER
 router.delete("/:id", verifyUser, deleteUser);
@@ -36,6 +36,6 @@ router.get("/:id", verifyUser, getUser);
 
 
 // GET GENDERED USERS
-router.get('/gendered-users', verifyUser, getGenderedUsers)
+router.get('/gender/match', verifyUser, gender)
 
 export default router;

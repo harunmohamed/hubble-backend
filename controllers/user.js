@@ -1,10 +1,10 @@
 import User from "../models/User.js";
 
-// update user - CAN USE THIS TO ADD HASHTAGS AND MATHCES TOO
+// update user - CAN USE THIS TO ADD HASHTAGS AND MATCHES TOO
 export const updateUser = async (req,res,next)=>{
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
+      req.user._id,
       { $set: req.body },
       { new: true }
     );
@@ -47,9 +47,10 @@ export const getUsers = async (req,res,next)=>{
 
 
 // get gendered users 
-export const getGenderedUsers = async (req,res,next)=>{
+export const gender = async (req,res,next) => {
   try {
-    const foundUsers = await User.findAll({gender: req.body.gender});
+    const oppositeGender = req.user.gender == "male" ? "female" : "male";
+    const foundUsers = await User.find({"gender": oppositeGender});
     res.status(200).json(foundUsers);
   } catch (err) {
     next(err);

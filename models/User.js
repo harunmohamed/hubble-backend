@@ -45,10 +45,10 @@ const UserSchema = new mongoose.Schema(
       default: false,
     },
     hashtags: {
-      type: [{String}]
+      type: [String]
     },
     matches: {
-      type: [{String}]
+      type: [String] 
     }
   },
   { timestamps: true, collection: 'users' }
