@@ -22,7 +22,7 @@ export const register = async (req, res, next) => {
       process.env.JWT
     );
 
-    res.status(200).send( {message:"User has been created.", token: token });
+    res.status(200).send( {message:"User has been created.", token: token, userId: newUser._id});
   } catch (err) {
     next(err);
   }
@@ -44,7 +44,7 @@ export const login = async (req, res, next) => {
       process.env.JWT
     );
 
-    res.status(200).send( {message:"User has been logged in.", token: token });
+    res.status(200).send( {message:"User has been logged in.", token: token, userId: user._id });
   } catch (err) {
     next(err);
   }

@@ -45,8 +45,8 @@ app.use((err, req, res, next) => {
 const start = async () => {
   try { 
     await connect()
-    app.listen(8800, () => {
-      console.log("Server started on port 8800.");
+    app.listen(8000, () => {
+      console.log("Server started on port 8000.");
     });
   } catch (error) {
     console.error(error);
@@ -54,4 +54,4 @@ const start = async () => {
   }
 };
 
-start();
+start(); 
