@@ -1,11 +1,17 @@
+import Hashtag from "../models/Hashtag.js";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
+
+export const currentUser = async(req, res, next) => {
+  return res.status(200).json(req.user)
+}
 // update user - CAN USE THIS TO ADD HASHTAGS AND MATCHES TOO
 export const updateUser = async (req,res,next)=>{
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { $set: req.body },
+      { $addToSet: req.body },
       { new: true }
     );
     res.status(200).json(updatedUser);
@@ -55,4 +61,50 @@ export const gender = async (req,res,next) => {
   } catch (err) {
     next(err);
   }
+}
+
+// users current_user matches with to show in chat
+export const addMatch = async (req, res, next) => {
+
+  const updateMatch = await User.findByIdAndUpdate(
+    req.user._id,
+    { $addToSet: { matches: req.body.matchedUserId } },
+    { new: true }
+  );
+
+  let matched = false
+  const checkMatch = await User.find( { matches: {"$in" : [ req.user._id ] },  "_id": req.body.matchedUserId }  )
+  
+  checkMatch.length >= 1 ? matched = true : matched = false;
+
+  res.status(200).json({"isMatch": matched}); 
+}
+
+
+// users who follow the same hashtags as current user
+export const hashtagMembers = async (req, res, next) => {
+  const toHashtags = await Hashtag.find( { _id:req.user.hashtags} )
+
+  console.log(req.user._id)
+
+  const memberIds = {}
+  
+  for (let data = 0; data < toHashtags.length; data++) {
+    const element = toHashtags[data].members;
+    
+    for (let index = 0; index < element.length; index++) {
+      if (element[index] !== req.user._id.toString()){
+        memberIds[index] = element[index]
+      }
+      
+    }
+  }
+
+  const otherMembers = []
+  for (const id in memberIds) {
+    let userObject = await User.find( { "_id": memberIds[id] } )  
+    otherMembers.push(userObject);
+  }
+
+  return res.status(200).json(otherMembers)
 }

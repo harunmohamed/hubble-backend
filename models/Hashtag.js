@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 const HashtagSchema = new mongoose.Schema (
     {
         name: {
-            type: String
+            type: String,
+            unique: true
         },
         owner: {
             type: String

@@ -4,7 +4,10 @@ import {
   deleteUser,
   getUser,
   getUsers,
-  gender
+  gender,
+  currentUser,
+  hashtagMembers,
+  addMatch
 } from "../controllers/user.js";
 import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 
@@ -34,8 +37,21 @@ router.get("/", verifyAdmin, getUsers);
 //GET USER
 router.get("/:id", verifyUser, getUser);
 
+router.get("/current/user", verifyUser, currentUser)
+
+
+// ADD NEW MATCH TO USER MATCHES
+router.put("/add/match", verifyUser, addMatch)
 
 // GET GENDERED USERS
 router.get('/gender/match', verifyUser, gender)
+
+// GET USERS WITH COMMON HASHTAGS AS CURRENT USER
+router.get("/common/hashtags", verifyUser, hashtagMembers)
+
+
+
+
+
 
 export default router;

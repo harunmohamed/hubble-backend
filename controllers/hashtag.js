@@ -15,7 +15,7 @@ export const updateHashtag = async (req, res, next) => {
     try {
         const updatedHashtag = await Hashtag.findByIdAndUpdate(
             req.params.id,
-            { $set: req.body },
+            { $addToSet: req.body },
             {new : true}
         );
         res.status(200).json( {data: updatedHashtag });
