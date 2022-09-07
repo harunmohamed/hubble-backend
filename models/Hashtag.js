@@ -21,4 +21,4 @@ const HashtagSchema = new mongoose.Schema (
     { timestamps: true, collection: 'hashtags' }
 )
 
-export default mongoose.model("Hashtag", HashtagSchema)
+export default mongoose.model("Hashtag", HashtagSchema) 

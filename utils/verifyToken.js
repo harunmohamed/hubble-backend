@@ -3,7 +3,9 @@ import User from "../models/User.js";
 import { createError } from "../utils/error.js";
 
 export const verifyToken = async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
+  console.log(req.rawHeaders[11])
+  const token= req.rawHeaders[11].replace("Bearer " , "")
+  //const token = req.header('Authorization').replace('Bearer ', '');
   //console.log(token)
   if (!token) {
     return next(createError(401, "You are not authenticated!"));

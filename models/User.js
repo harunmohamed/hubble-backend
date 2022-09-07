@@ -22,17 +22,14 @@ const UserSchema = new mongoose.Schema(
     },
     dob_day: { 
       type: Number,
-      default: 20,
       required: true,
     },
     dob_month: {
       type: Number,
-      default: 5,
       required: true,
     },
     dob_year: {
       type: Number,
-      default: 2000,
       required: true,
     },
     img_url: {
