@@ -22,15 +22,12 @@ const UserSchema = new mongoose.Schema(
     },
     dob_day: { 
       type: Number,
-      required: true,
     },
     dob_month: {
       type: Number,
-      required: true,
     },
     dob_year: {
       type: Number,
-      required: true,
     },
     img_url: {
       type: String,
