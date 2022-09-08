@@ -76,8 +76,8 @@ export const matches = async (req, res, next) => {
     const matches = await User.find({
       "_id": currentUserMatches
     })
-    
-    res.status(200).json(usersWhoLikedCurrentUser);
+
+    res.status(200).json(matches);
   } catch (err) {
     next(err);
   }
