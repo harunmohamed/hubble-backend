@@ -19,6 +19,7 @@ const UserSchema = new mongoose.Schema(
     },
     about: {
       type: String,
+      default: ""
     },
     dob_day: { 
       type: Number,

@@ -10,12 +10,12 @@ export const currentUser = async(req, res, next) => {
 export const updateUser = async (req,res,next)=>{
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id,
-      { $addToSet: req.body },
+      req.user.id,
+      { $set: req.body },
       { new: true }
     );
     res.status(200).json(updatedUser);
-  } catch (err) {
+  } catch (err) { 
     next(err);
   }
 }
@@ -33,7 +33,7 @@ export const deleteUser = async (req,res,next)=>{
 // get single user
 export const getUser = async (req,res,next)=>{
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.user.id);
     res.status(200).json(user);
   } catch (err) {
     next(err);
@@ -83,9 +83,7 @@ export const addMatch = async (req, res, next) => {
 
 // users who follow the same hashtags as current user
 export const hashtagMembers = async (req, res, next) => {
-  const toHashtags = await Hashtag.find( { _id:req.user.hashtags} )
-
-  console.log(req.user._id)
+  const toHashtags = await Hashtag.find( { name:req.user.hashtags} )
 
   const memberIds = {}
   
