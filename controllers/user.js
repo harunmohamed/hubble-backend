@@ -66,26 +66,18 @@ export const gender = async (req,res,next) => {
 
 
 ////////// work in progress //////////////
-export const genderMatched = async (req, res, next) => {
+export const matches = async (req, res, next) => {
   try {
-    const matchedUsers = await User.aggregate(
-      [
-        { _id : { $ne : req.user._id } },  
-        {
-          "$group" : {
-            "_id" : 0 ,
-            "first" : { "$first" : "$matches"}
-          }
-        },
-        {
-          "$project": {
-            "first": 1,
-            "common" : { "$setIntersection" : [ "$first" ] },
-            "_id": 0
-          }
-        }
-      ]);
-    res.status(200).json(matchedUsers);
+    const usersCurrentUserLikes = req.user.matches // arr1
+    const usersWhoLikedCurrentUser = await User.find({"matches" : req.user._id})
+    const usersWhoLikedCurrentUserIds = usersWhoLikedCurrentUser.map(user => { return (user._id.toString()) }) // arr2
+
+    const currentUserMatches = usersCurrentUserLikes.filter(user => usersWhoLikedCurrentUserIds.includes(user)) // returns an array of ids
+    const matches = await User.find({
+      "_id": currentUserMatches
+    })
+    
+    res.status(200).json(usersWhoLikedCurrentUser);
   } catch (err) {
     next(err);
   }
