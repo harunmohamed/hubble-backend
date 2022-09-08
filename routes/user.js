@@ -7,7 +7,8 @@ import {
   gender,
   currentUser,
   hashtagMembers,
-  addMatch
+  addMatch,
+  genderMatched
 } from "../controllers/user.js";
 import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 
@@ -47,6 +48,8 @@ router.put("/add/match", verifyUser, addMatch)
 
 // GET GENDERED USERS
 router.get('/gender/match', verifyUser, gender)
+
+router.get('/gender/matched', verifyUser, genderMatched)
 
 // GET USERS WITH COMMON HASHTAGS AS CURRENT USER
 router.get("/common/hashtags", verifyUser, hashtagMembers)

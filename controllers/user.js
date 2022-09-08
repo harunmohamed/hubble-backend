@@ -56,8 +56,36 @@ export const getUsers = async (req,res,next)=>{
 export const gender = async (req,res,next) => {
   try {
     const oppositeGender = req.user.gender == "male" ? "female" : "male";
-    const foundUsers = await User.find({"gender": oppositeGender});
+    const foundUsers = await User.find({"gender": oppositeGender, "matches": { "$ne" : req.user._id} });
+    //const matchedUsers = await User.find( {"matches" : req.user._id} )
     res.status(200).json(foundUsers);
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+////////// work in progress //////////////
+export const genderMatched = async (req, res, next) => {
+  try {
+    const matchedUsers = await User.aggregate(
+      [
+        { _id : { $ne : req.user._id } },  
+        {
+          "$group" : {
+            "_id" : 0 ,
+            "first" : { "$first" : "$matches"}
+          }
+        },
+        {
+          "$project": {
+            "first": 1,
+            "common" : { "$setIntersection" : [ "$first" ] },
+            "_id": 0
+          }
+        }
+      ]);
+    res.status(200).json(matchedUsers);
   } catch (err) {
     next(err);
   }
@@ -65,18 +93,18 @@ export const gender = async (req,res,next) => {
 
 // users current_user matches with to show in chat
 export const addMatch = async (req, res, next) => {
-
+  console.log(req.body)
   const updateMatch = await User.findByIdAndUpdate(
     req.user._id,
     { $addToSet: { matches: req.body.matchedUserId } },
-    { new: true }
+    { new: true } 
   );
 
   let matched = false
   const checkMatch = await User.find( { matches: {"$in" : [ req.user._id ] },  "_id": req.body.matchedUserId }  )
   
   checkMatch.length >= 1 ? matched = true : matched = false;
-
+ 
   res.status(200).json({"isMatch": matched}); 
 }
 
