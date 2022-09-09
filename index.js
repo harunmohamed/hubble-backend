@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 });
 
 
-const server = app.listen(8000, () => console.log("Server started on port 8000."));
+const server = app.listen(process.env.PORT || 8000, () => console.log(`Server started on port ${process.env.PORT}.`)); 
   
 const io = new Server(server, {
     cors: {
