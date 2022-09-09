@@ -89,13 +89,13 @@ io.of('/api/chat').on('connection', (socket) => {
     const messageData = data ? await saveMessage(data) : {}
     let message = {"msg" : false}
 
+    // :WIP :: return updated document together with success response
     messageData ? message["msg"] = "Success" : message; 
 
     socket.emit('messageResponse', message)
   });
 
-  
-  socket.on('disconnect', async () => {
+  socket.on('disconnect', async () => { 
     console.log('socket disconnected!')
   });
 
