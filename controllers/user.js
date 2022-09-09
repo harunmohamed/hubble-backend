@@ -10,12 +10,12 @@ export const currentUser = async(req, res, next) => {
 export const updateUser = async (req,res,next)=>{
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id,
-      { $addToSet: req.body },
+      req.user.id,
+      { $set: req.body },
       { new: true }
     );
     res.status(200).json(updatedUser);
-  } catch (err) {
+  } catch (err) { 
     next(err);
   }
 }
@@ -33,7 +33,7 @@ export const deleteUser = async (req,res,next)=>{
 // get single user
 export const getUser = async (req,res,next)=>{
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.user.id);
     res.status(200).json(user);
   } catch (err) {
     next(err);
@@ -56,8 +56,38 @@ export const getUsers = async (req,res,next)=>{
 export const gender = async (req,res,next) => {
   try {
     const oppositeGender = req.user.gender == "male" ? "female" : "male";
-    const foundUsers = await User.find({"gender": oppositeGender});
-    res.status(200).json(foundUsers);
+
+    let findOtherUsers = await User.find({"gender": oppositeGender  });
+
+    let notSwippedRightUserIds = []
+
+    for (let index = 0; index < findOtherUsers.length; index++) {
+      let alreadySwippedRight = req.user.matches.includes(findOtherUsers[index]._id);
+      if (!alreadySwippedRight){ notSwippedRightUserIds.push(findOtherUsers[index]._id.toString()) }
+    }
+
+    let finalResult = await User.find( {"_id": notSwippedRightUserIds} )
+
+    res.status(200).json(finalResult);
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+// Return matched user information
+export const matches = async (req, res, next) => {
+  try {
+    const usersCurrentUserLikes = req.user.matches // arr1
+    const usersWhoLikedCurrentUser = await User.find({"matches" : req.user._id})
+    const usersWhoLikedCurrentUserIds = usersWhoLikedCurrentUser.map(user => { return (user._id.toString()) }) // arr2
+
+    const currentUserMatches = usersCurrentUserLikes.filter(user => usersWhoLikedCurrentUserIds.includes(user)) // returns an array of ids
+    const matches = await User.find({
+      "_id": currentUserMatches
+    })
+
+    res.status(200).json(matches);
   } catch (err) {
     next(err);
   }
@@ -65,27 +95,25 @@ export const gender = async (req,res,next) => {
 
 // users current_user matches with to show in chat
 export const addMatch = async (req, res, next) => {
-
+  console.log(req.body)
   const updateMatch = await User.findByIdAndUpdate(
     req.user._id,
     { $addToSet: { matches: req.body.matchedUserId } },
-    { new: true }
+    { new: true } 
   );
 
   let matched = false
   const checkMatch = await User.find( { matches: {"$in" : [ req.user._id ] },  "_id": req.body.matchedUserId }  )
   
   checkMatch.length >= 1 ? matched = true : matched = false;
-
+ 
   res.status(200).json({"isMatch": matched}); 
 }
 
 
 // users who follow the same hashtags as current user
 export const hashtagMembers = async (req, res, next) => {
-  const toHashtags = await Hashtag.find( { _id:req.user.hashtags} )
-
-  console.log(req.user._id)
+  const toHashtags = await Hashtag.find( { name:req.user.hashtags} )
 
   const memberIds = {}
   

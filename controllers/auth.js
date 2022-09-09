@@ -23,7 +23,7 @@ export const register = async (req, res, next) => {
     );
 
     res.status(200).send( {message:"User has been created.", token: token, userId: newUser._id});
-  } catch (err) {
+  } catch (err) { 
     next(err);
   }
 };
