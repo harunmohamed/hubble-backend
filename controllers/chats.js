@@ -3,11 +3,18 @@ import Chats from "../models/Chats.js"
 
 export const saveMessage = async (data) => {
     try {
-        let newMessage = await Chats.findOneAndUpdate(
-            {'room_name' : data['roomName']}, 
-            { $push: {messages: data}}
-        )
+        let newMessage = false;
+        
+        if (data["data"].toString().length > 1) {
+            
+            newMessage = await Chats.findOneAndUpdate(
+                {'room_name' : data['roomName']}, 
+                { $push: {messages: data}}
+            )
+        }
+        
         return newMessage ? true : false
+    
     } catch (err) {
         return false;
     }
