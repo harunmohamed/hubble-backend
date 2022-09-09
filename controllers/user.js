@@ -56,16 +56,26 @@ export const getUsers = async (req,res,next)=>{
 export const gender = async (req,res,next) => {
   try {
     const oppositeGender = req.user.gender == "male" ? "female" : "male";
-    const foundUsers = await User.find({"gender": oppositeGender, "matches": { "$ne" : req.user._id} });
-    //const matchedUsers = await User.find( {"matches" : req.user._id} )
-    res.status(200).json(foundUsers);
+
+    let findOtherUsers = await User.find({"gender": oppositeGender  });
+
+    let notSwippedRightUserIds = []
+
+    for (let index = 0; index < findOtherUsers.length; index++) {
+      let alreadySwippedRight = req.user.matches.includes(findOtherUsers[index]._id);
+      if (!alreadySwippedRight){ notSwippedRightUserIds.push(findOtherUsers[index]._id.toString()) }
+    }
+
+    let finalResult = await User.find( {"_id": notSwippedRightUserIds} )
+
+    res.status(200).json(finalResult);
   } catch (err) {
     next(err);
   }
 }
 
 
-////////// work in progress //////////////
+// Return matched user information
 export const matches = async (req, res, next) => {
   try {
     const usersCurrentUserLikes = req.user.matches // arr1
