@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/user.js";
 import hashtagRoute from "./routes/hashtag.js";
+import vibeRoute from "./routes/vibe.js";
 import cors from "cors";
 import connect from "./utils/mongoConnect.js";
 import {saveMessage, createRoom} from './controllers/chats.js';
@@ -25,6 +26,7 @@ app.set("trust proxy", true);
 app.use("/api/auth", authRoute);
 app.use("/api/user", usersRoute);
 app.use("/api/hashtag", hashtagRoute);
+app.use("/api/vibe", vibeRoute);
 
 
 app.use((err, req, res, next) => {
