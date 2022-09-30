@@ -8,6 +8,7 @@ import hashtagRoute from "./routes/hashtag.js";
 import cors from "cors";
 import connect from "./utils/mongoConnect.js";
 import {saveMessage, createRoom} from './controllers/chats.js';
+import { newUser, getActiveUser, exitRoom, getIndividualRoomUsers } from './utils/socketHelper.js';
 const app = express();
 
 dotenv.config();
@@ -63,6 +64,9 @@ io.of('/api/chat').on('connection', (socket) => {
         socket.emit('roomResponse', {"msg": "Error in room socket: " + e.message})
       }
     }
+
+    const user = newUser(socket.id, data["created_by"], data["roomName"]);
+    console.log(user, " <--- new user added!");
     const roomData = data ? await createRoom(data) : {}
 
     let message = {"msg": false}
@@ -85,6 +89,8 @@ io.of('/api/chat').on('connection', (socket) => {
         return;
       }
     }
+
+    
 
     const messageData = data ? await saveMessage(data) : {}
     let message = {"msg" : false}
