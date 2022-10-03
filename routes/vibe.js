@@ -5,7 +5,7 @@ import {
     deleteVibe,
     getVibe,
     getVibes,
-} from "../controllers/Vibe.js";
+} from "../controllers/vibe.js";
 import { verifyUser, verifyAdmin } from "../utils/verifyToken.js";
 
 const router = express.Router();
