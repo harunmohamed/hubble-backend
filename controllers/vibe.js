@@ -1,4 +1,4 @@
-import Vibe from "../models/Vibe";
+import Vibe from "../models/Vibe.js";
 
 // create vibe 
 export const createVibe = async( req, res, next) => {

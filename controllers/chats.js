@@ -1,4 +1,4 @@
-import Chats from "../models/Chats.js"
+import Chats from "../models/Chat.js"
 
 
 export const saveMessage = async (data) => {
